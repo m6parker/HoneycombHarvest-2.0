@@ -45,40 +45,46 @@ let cameraOffset = { x: 0, y: 0 };
 let mouseX = 0, mouseY = 0;
 let worldX = 0, worldY = 0;
 function movePlayer(){
+    // console.log(moveableBoundaries)
     // move background + stagnant objects when bee moves
     // up and down movement
-    if(keys.w.pressed){
+    if(keys.w.pressed && !preventUp){
         movables.forEach(movable => { movable.position.y += player.speed });
+        moveableBoundaries.forEach(coordinate => { coordinate[1] += player.speed });
         cameraOffset.y -= player.speed;
     }
-    else if(keys.s.pressed){
+    else if(keys.s.pressed && !preventDown){
         movables.forEach(movable => { movable.position.y -= player.speed });
+        moveableBoundaries.forEach(coordinate => { coordinate[1] -= player.speed });
         cameraOffset.x += player.speed;
     }
 
     // side to side movement
-    if(keys.a.pressed){
+    if(keys.a.pressed && !preventLeft){
         movables.forEach(movable => { movable.position.x += player.speed });
+        moveableBoundaries.forEach(coordinate => { coordinate[0] += player.speed });
         cameraOffset.y -= player.speed;
     }
-    else if(keys.d.pressed){
+    else if(keys.d.pressed && !preventRight){
         movables.forEach(movable => { movable.position.x -= player.speed });
+        moveableBoundaries.forEach(coordinate => { coordinate[0] -= player.speed });
         cameraOffset.x += player.speed;
     }
+}
 
-    //collecting items, removing image from canvas
-    // for (let i = items.length - 1; i >= 0; i--) {
-    //     const item = items[i];
-    //     // if bee collides with item and has space to carry it
-    //     if (onSprite(item) && player.sprite.space) {
-    //         items.splice(i, 1);
-    //         const indexInMovables = movables.indexOf(item);
-    //         if (indexInMovables !== -1) {
-    //             movables.splice(indexInMovables, 1);
-    //         }
-    //         // console.log(`${item.name} collected!`);
-    //         player.inventory.addToInventory(item.name, item.quality);
-    //     }
-    // }
+let preventUp = false;
+let preventDown = false;
+let preventLeft = false;
+let preventRight = false;
+
+// if bee is in a certain location in the canvas such as a garden 
+function inGarden(gardenBounds){
+    // console.log(gardenBounds)
+    return (
+        player.sprite.position.x + 32 >= gardenBounds[0] &&
+        player.sprite.position.x <= gardenBounds[0] + gardenBounds[2] &&
+        player.sprite.position.y <= gardenBounds[1] + gardenBounds[3] &&
+        player.sprite.position.y + 32 >= gardenBounds[1]
+    );
 }
 

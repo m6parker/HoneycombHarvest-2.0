@@ -1,9 +1,8 @@
 class Sprite{
-    constructor(image, {position}){
+    constructor({image, position}){
         this.image = image;
         this.position = position;
-
-        // console.log('created sprite.');
+        console.log(this)
     }
 
     draw(){
