@@ -17,36 +17,27 @@ function animate(){
     window.requestAnimationFrame(animate);
     context.clearRect(0, 0, canvas.width, canvas.height);
     
+    // collsions.sprite.draw();
     world.sprite.draw();
-    collsions.sprite.draw();
     player.sprite.draw();
     foreground.sprite.draw();
 
-    // todo for collisions:
-    // bool inBounds()
-    // if !inBounds(worldBoundaries) { prevent movement }
-    // if inbounds(foregroundList[]) { prevent movement }
-    // if inbounds(gardenBoundariesList[]) { in garden }
-    // all part of moveableBoundaries array
+    keepOut(houseCollision);
+    checkBoundaries(world.boundaries)
 
-    inGarden(world.boundaries)
-    console.log(inGarden(world.boundaries))
     movePlayer();
 }
 
-const world = new World('img/map(400x-expanded).png', [200, -200, 6500, 5000]);
-const collsions = new World('img/collisions_map.png');
+const world = new World('img/map(400x-expanded).png', [460, 10, 5888, 4606]);
 const foreground = new World('img/foreground_map.png');
 const player = new Player('bee', 20, 100, 5, 1, 1);
 
-// coordinates where player cannot leave
-// let worldBoundaries = [200, -200, 6500, 5000];
 // coordinates where player cannot enter
-let houseCollision = [];
+let houseCollision = [3581, 3652, 570, 64];
 let lampCollision = [];
 
-const movables = [world.sprite, collsions.sprite, foreground.sprite];
-const moveableBoundaries = [world.boundaries];
+const movables = [world.sprite, foreground.sprite];
+const moveableBoundaries = [world.boundaries, houseCollision];
 
 
 animate();
@@ -74,6 +65,6 @@ canvas.addEventListener('click', (event) => {
     const screenX = event.clientX - rect.left;
     const screenY = event.clientY - rect.top;
     //testing
-    console.log("MONITOR: ", mouseLocation.x, mouseLocation.y)
+    // console.log("MONITOR: ", mouseLocation.x, mouseLocation.y)
     console.log("WORLD: ", cameraOffset.x + mouseLocation.x, cameraOffset.y + mouseLocation.y) // sprite coords
 });
