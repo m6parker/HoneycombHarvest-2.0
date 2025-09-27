@@ -73,6 +73,21 @@ function movePlayer(){
         cameraOffset.x += player.speed;
         preventLeft = false;
     }
+
+    //collecting items, removing image from canvas
+    for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        // if bee collides with item and has space to carry it
+        if (onSprite(item)){// && player.sprite.space) {
+            items.splice(i, 1);
+            const indexInMovables = movables.indexOf(item);
+            if (indexInMovables !== -1) {
+                movables.splice(indexInMovables, 1);
+            }
+            console.log(`${item.name} collected!`);
+            player.inventory.addToInventory(item.name, item.quality);
+        }
+    }
 }
 
 let preventUp = false;
@@ -80,19 +95,19 @@ let preventDown = false;
 let preventLeft = false;
 let preventRight = false;
 function checkBoundaries(boundaries){
-    if(player.sprite.position.x + 32 < boundaries[0]){
+    if(player.position.x + 32 < boundaries[0]){
         //prevent movement left
         preventLeft = true;
     }
-    if(player.sprite.position.x > boundaries[0] + boundaries[2]){
+    if(player.position.x > boundaries[0] + boundaries[2]){
         //prevent movement right
         preventRight = true;
     }
-    if(player.sprite.position.y > boundaries[1] + boundaries[3]){
+    if(player.position.y > boundaries[1] + boundaries[3]){
         //prevent movement down
         preventDown = true;
     }
-    if(player.sprite.position.y + 32 < boundaries[1]){
+    if(player.position.y + 32 < boundaries[1]){
         //prevent movement up
         preventUp = true;
     }
@@ -108,10 +123,10 @@ function keepOut(restrictedArea) {
     preventRight = false;
 
     // check if bee is outside the restricted area
-    const playerLeft = player.sprite.position.x;
-    const playerRight = player.sprite.position.x + 32;
-    const playerTop = player.sprite.position.y;
-    const playerBottom = player.sprite.position.y + 32;
+    const playerLeft = player.position.x;
+    const playerRight = player.position.x + 32;
+    const playerTop = player.position.y;
+    const playerBottom = player.position.y + 32;
 
     const areaLeft = restrictedArea[0];
     const areaRight = restrictedArea[0] + restrictedArea[2];
@@ -145,10 +160,36 @@ function keepOut(restrictedArea) {
 function inGarden(gardenBounds){
     // console.log(gardenBounds)
     return (
-        player.sprite.position.x + 32 >= gardenBounds[0] &&
-        player.sprite.position.x <= gardenBounds[0] + gardenBounds[2] &&
-        player.sprite.position.y <= gardenBounds[1] + gardenBounds[3] &&
-        player.sprite.position.y + 32 >= gardenBounds[1]
+        player.position.x + 32 >= gardenBounds[0] &&
+        player.position.x <= gardenBounds[0] + gardenBounds[2] &&
+        player.position.y <= gardenBounds[1] + gardenBounds[3] &&
+        player.position.y + 32 >= gardenBounds[1]
     );
 }
 
+// if bee is over another sprite such as the hive or an item
+function onSprite(sprite){
+    return (
+        player.position.x + player.width >= sprite.position.x  &&
+        player.position.x <= sprite.position.x + sprite.size   &&
+        player.position.y <= sprite.position.y + sprite.size   &&
+        player.position.y + player.height >= sprite.position.y 
+    );
+}
+
+
+// ------------------ items -----------------------------
+
+function getRandomQuality(){
+    return parseFloat(Math.random().toFixed(2));
+}
+
+const items = [];
+function spawnItems(itemName, quantity, location){
+    for (let i = 0; i < quantity; i++) {
+        item = new Item(16, 'world', `img/items/${itemName}.png`);
+        const x = location[0] + Math.random() * (location[2] - 30);
+        const y = location[1] + Math.random() * (location[3] - 30);
+        item.position = {x, y}
+    }
+}

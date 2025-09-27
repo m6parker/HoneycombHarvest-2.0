@@ -1,11 +1,12 @@
 class Sprite{
-    constructor({image, position}){
+    constructor(image){
         this.image = image;
-        this.position = position;
-        console.log(this)
+        
+        // const img = new Image();
+        // img.src = `img/${image}.png`;
     }
-
-    draw(){
-        context.drawImage(this.image, this.position.x, this.position.y);
+    
+    draw(position){
+        context.drawImage(this.image, position.x, position.y);
     }
 }

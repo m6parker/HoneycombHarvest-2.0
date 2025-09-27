@@ -13,14 +13,16 @@ ResizeCanvas();
 
 window.addEventListener("resize", () => ResizeCanvas());
 
+// --------------------- game loop -----------------------------
 function animate(){
     window.requestAnimationFrame(animate);
     context.clearRect(0, 0, canvas.width, canvas.height);
     
-    // collsions.sprite.draw();
-    world.sprite.draw();
-    player.sprite.draw();
-    foreground.sprite.draw();
+    world.sprite.draw(world.position);
+    player.sprite.draw(player.position);
+    foreground.sprite.draw(foreground.position);
+    items.forEach(item => item.sprite.draw(item.position));
+
 
     keepOut(houseCollision);
     checkBoundaries(world.boundaries)
@@ -33,14 +35,21 @@ const foreground = new World('img/foreground_map.png');
 const player = new Player('bee', 20, 100, 5, 1, 1);
 
 // coordinates where player cannot enter
-let houseCollision = [3581, 3652, 570, 64];
-let lampCollision = [];
+const houseCollision = [3581, 3652, 570, 64];
 
-const movables = [world.sprite, foreground.sprite];
-const moveableBoundaries = [world.boundaries, houseCollision];
+// designated areas
+const gardenOne = [2612, 815, 705, 315]
 
+//put flowers in the garden
+spawnItems('pumpkin', 15, gardenOne);
 
+// add everything to the correct lists before drawing them 
+const movables = [world, foreground, ...items];
+const moveableBoundaries = [world.boundaries, houseCollision, gardenOne];
 animate();
+
+
+//----------- canvas interactions --------------------------------
 
 document.addEventListener('mousemove', (e) => {
     mouseLocation.x = e.clientX;
