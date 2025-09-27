@@ -9,8 +9,6 @@ class World{
         };
         
         this.sprite = new Sprite(mapImage);
-        
-        console.log('created map.', this);
     }
 }
 

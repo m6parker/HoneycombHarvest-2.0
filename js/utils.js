@@ -19,10 +19,10 @@ window.addEventListener('keydown', (e) => {
     if(key === 'a' || key === 'arrowleft'){ keys.a.pressed = true; player.sprite.direction = 0; }
     else if(key === 'd' || key === 'arrowright'){ keys.d.pressed = true; player.sprite.direction = 1; }
 
-    // if (e.key === 'Tab') {
-    //     e.preventDefault();
-    //     document.querySelector('.content').classList.toggle('hidden');
-    // }
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        openTab();
+    }
     
 });
 
@@ -51,12 +51,14 @@ function movePlayer(){
         movables.forEach(movable => { movable.position.y += player.speed });
         moveableBoundaries.forEach(coordinate => { coordinate[1] += player.speed });
         cameraOffset.y -= player.speed;
+        hideAll()
         preventDown = false;
     }
     else if(keys.s.pressed && !preventDown){
         movables.forEach(movable => { movable.position.y -= player.speed });
         moveableBoundaries.forEach(coordinate => { coordinate[1] -= player.speed });
         cameraOffset.y += player.speed;
+        hideAll()
         preventUp = false;
     }
 
@@ -65,12 +67,14 @@ function movePlayer(){
         movables.forEach(movable => { movable.position.x += player.speed });
         moveableBoundaries.forEach(coordinate => { coordinate[0] += player.speed });
         cameraOffset.x -= player.speed;
+        hideAll()
         preventRight = false;
     }
     else if(keys.d.pressed && !preventRight){
         movables.forEach(movable => { movable.position.x -= player.speed });
         moveableBoundaries.forEach(coordinate => { coordinate[0] -= player.speed });
         cameraOffset.x += player.speed;
+        hideAll()
         preventLeft = false;
     }
 
@@ -78,14 +82,18 @@ function movePlayer(){
     for (let i = items.length - 1; i >= 0; i--) {
         const item = items[i];
         // if bee collides with item and has space to carry it
-        if (onSprite(item)){// && player.sprite.space) {
-            items.splice(i, 1);
-            const indexInMovables = movables.indexOf(item);
-            if (indexInMovables !== -1) {
-                movables.splice(indexInMovables, 1);
+        if (onSprite(item)){
+            if(player.hasSpace()){
+                items.splice(i, 1);
+                const indexInMovables = movables.indexOf(item);
+                if (indexInMovables !== -1) {
+                    movables.splice(indexInMovables, 1);
+                }
+                // console.log(`${item.name} collected!`);
+                player.inventory.addToInventory(item.name, item.quality);
+            }else{
+                console.log('inventory full!')
             }
-            console.log(`${item.name} collected!`);
-            player.inventory.addToInventory(item.name, item.quality);
         }
     }
 }
@@ -177,6 +185,10 @@ function onSprite(sprite){
     );
 }
 
+const tooltip = document.querySelector('.tooltip');
+function hideAll(){
+    tooltip.classList.add('hidden');
+}
 
 // ------------------ items -----------------------------
 
@@ -187,9 +199,60 @@ function getRandomQuality(){
 const items = [];
 function spawnItems(itemName, quantity, location){
     for (let i = 0; i < quantity; i++) {
-        item = new Item(16, 'world', `img/items/${itemName}.png`);
+        item = new Item(itemName, 16, 'world', `img/items/${itemName}.png`);
         const x = location[0] + Math.random() * (location[2] - 30);
         const y = location[1] + Math.random() * (location[3] - 30);
         item.position = {x, y}
     }
+}
+
+
+//---------------- player menu -------------------------------
+
+// switch between tabs for each category type
+function openTab(event=null, name=null) {
+    const tabContents = document.getElementsByClassName("tab-content");
+    const tabButtons = document.getElementsByClassName("tab-button");
+    // show just the inventory when using tab button
+    let currentTarget = !event ? document.querySelector('#inventory-button') : event.currentTarget;
+    let tabName = !name ? 'bee-inventory' : name;
+
+    for (let i = 0; i < tabContents.length; i++) {
+        if(currentTarget.classList.contains('selected')){
+            tabContents[i].style.display = "none";
+            currentTarget.classList.remove('selected');
+            document.querySelector('.content').classList.add('hidden');
+            document.querySelector('.inv-img').src = 'img/menu/inv_closed.png';
+            document.querySelector('.stats-img').src = 'img/menu/stats_closed.png';
+            document.querySelector('.quests-img').src = 'img/menu/quests_closed.png';
+            return;
+        }
+        
+        // hide all elements with tab-content
+        tabContents[i].style.display = "none";
+    }
+    
+    // remove all selected buttons
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].className = tabButtons[i].className.replace(" selected", "");
+    }
+    
+    // show current tab, add selected to button that opened the tab
+    document.getElementById(tabName).style.display = "block";
+    document.querySelector('.content').classList.remove('hidden');
+    currentTarget.className += " selected";
+
+    if(tabName === 'bee-inventory'){
+        document.querySelector('.inv-img').src = 'img/menu/inv_open.png';
+    }else if(tabName === 'stats'){
+        document.querySelector('.stats-img').src = 'img/menu/stats_closed.png';
+        document.querySelector('.inv-img').src = 'img/menu/inv_closed.png';
+    }else if(tabName === 'quests'){
+        document.querySelector('.quests-img').src = 'img/menu/quests_closed.png';
+        document.querySelector('.inv-img').src = 'img/menu/inv_closed.png';
+    }
+}
+
+function setLevelUI(level){
+    document.querySelector('.level-input').value = level;
 }

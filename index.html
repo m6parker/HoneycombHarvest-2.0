@@ -4,10 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Honeycomb Harvest</title>
+    <link href="https://fonts.cdnfonts.com/css/devin-chavez-font" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+
     <canvas></canvas>
+
+
+<div class="menu">
+        <div class="tabs">
+            <div class="tab-button" id="inventory-button" onclick="openTab(event, 'bee-inventory')"><img class="inv-img" src="img/menu/inv_closed.png" alt=""></div>
+            <div class="tab-button" id="stats-button" onclick="openTab(event, 'stats')"><img class="stats-img" src="img/menu/stats_closed.png" alt=""></div>
+            <div class="tab-button" id="quests-button" onclick="openTab(event, 'quests')"><img class="quests-img" src="img/menu/quests_closed.png" alt=""></div>
+        </div>
+        <div class="content hidden">
+            <div id="bee-inventory" class="tab-content">
+                <h3 class="inventory-label">Inventory</h3>
+                <div class="bee-inventory"></div>
+            </div>
+            <div id="stats" class="tab-content" style="display: none;">
+                <div class="health-container">
+                    <div class="heart-container">
+                        <img src="img/menu/heart.png" class="heart-img">
+                        <img src="img/menu/heart.png" class="heart-img">
+                        <img src="img/menu/heart.png" class="heart-img">
+                    </div>
+
+                    <div class="bottom-section">
+                        <div class="bee-close-up">
+                            <img class="beeImg" src="img/menu/bee1.png">
+                        </div>
+                        <div class="health-content">
+                            <label>speed:<input type="text" class="speed-input" disabled></label>
+                            <label>strength:<input type="text" class="strength-input" disabled></label>
+                            <label>level:<input type="text" class="level-input" disabled></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="quests" class="tab-content" style="display: none;">
+                <div class="quests">
+                    <img src="img/menu/queen_bee.png">
+                    <div>
+                        <h3 class="quest-title"></h3>
+                        <div class="quest-description"></div>
+                    </div>
+                </div>
+
+                <div class="timer-container">
+                    <div class="timer">00:00:00</div>
+                    <button class="drop-button">Drop</button>
+                    <button class="pause-button">Pause</button>
+                    <button class="resume-button">Resume</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip">item info</div>
+
+
     <script src="./js/Item.js"></script>
     <script src="./js/utils.js"></script>
     <script src="./js/Inventory.js"></script>

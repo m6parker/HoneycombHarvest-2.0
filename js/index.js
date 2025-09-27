@@ -41,11 +41,12 @@ const houseCollision = [3581, 3652, 570, 64];
 const gardenOne = [2612, 815, 705, 315]
 
 //put flowers in the garden
-spawnItems('pumpkin', 15, gardenOne);
+spawnItems('pumpkin', 40, gardenOne);
 
 // add everything to the correct lists before drawing them 
 const movables = [world, foreground, ...items];
 const moveableBoundaries = [world.boundaries, houseCollision, gardenOne];
+// const selectables = [hiveSprite, greenhouseSprite, boxSprite, buyBoxSprite, frogSprite]; // sprites only rn
 animate();
 
 
@@ -56,16 +57,18 @@ document.addEventListener('mousemove', (e) => {
     mouseLocation.y = e.clientY;
 
     //hover sprites       
-    // selectables.forEach(movable => {
-    //     if(
-    //         mouseLocation.x >= movable.position.x &&
-    //         mouseLocation.x <= movable.position.x + movable.width &&
-    //         mouseLocation.y >= movable.position.y &&
-    //         mouseLocation.y <= movable.position.y + movable.height
-    //     ){
-    //         canvas.style.cursor = 'pointer';
-    //     }
-    // });
+    items.forEach(movable => {
+        if(
+            mouseLocation.x >= movable.position.x &&
+            mouseLocation.x <= movable.position.x + movable.size + 10 &&
+            mouseLocation.y >= movable.position.y &&
+            mouseLocation.y <= movable.position.y + movable.size + 10
+        ){
+            canvas.style.cursor = 'pointer';
+        }else{
+            canvas.style.cursor = 'default';
+        }
+    });
 });
 
 const mouseLocation = { x: 0, y: 0};
@@ -76,4 +79,23 @@ canvas.addEventListener('click', (event) => {
     //testing
     // console.log("MONITOR: ", mouseLocation.x, mouseLocation.y)
     console.log("WORLD: ", cameraOffset.x + mouseLocation.x, cameraOffset.y + mouseLocation.y) // sprite coords
+
+    // clicking items
+    console.log(items[0].position)
+    console.log(mouseLocation.x, mouseLocation.y)
+    items.forEach(item => {
+        if (
+            mouseLocation.x >= item.position.x &&
+            mouseLocation.x <= item.position.x + item.size + 10 &&
+            mouseLocation.y >= item.position.y &&
+            mouseLocation.y <= item.position.y + item.size + 10
+        ) {
+            item.selected = item.selected ? false : true;
+            tooltip.classList.remove('hidden');
+            tooltip.style.left = `${mouseLocation.x + 10}px`;
+            tooltip.style.top = `${mouseLocation.y + 10}px`;
+
+            tooltip.innerHTML = `${item.name}: ${item.quality}`;
+        }
+    });
 });

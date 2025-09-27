@@ -1,5 +1,6 @@
 class Item{
-    constructor(size, type, src){
+    constructor(name, size, type, src){
+        this.name = name;
         this.size = size;
         this.type = type;
         this.src = src;

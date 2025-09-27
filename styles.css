@@ -1,4 +1,253 @@
+/* 
+========================================
+||              GENERAL               ||
+========================================
+*/
+
 body{
-    overflow: hidden;
     margin: 0;
+    overflow: hidden;
+    background-color: black;
+    font-family: 'Devin Chavez Font', sans-serif;
+    user-select: none;
+}
+
+.hidden{
+    display: none !important;
+}
+
+button{
+    width: 80px;
+    padding: 5px;
+    background-color: rgba(255, 196, 0, 0.564);
+    border: 4px solid rgb(255, 196, 0);
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    margin: 5px;
+}
+
+button:hover, button.active{
+    background-color:rgb(255, 196, 0);
+}
+
+button:disabled{
+    border: 4px solid rgb(47, 47, 47);
+    background-color: #6161619e;
+    color: black;
+}
+
+/* 
+========================================
+||              WORLD UI              ||
+========================================
+*/
+
+.tooltip, .sprite-info{
+    border: 4px solid white;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: rgb(255, 172, 6);
+    color: white;
+    position: fixed;
+}
+
+/* 
+==========================================
+||              INVENTORY               ||
+==========================================
+*/
+
+.bee-inventory, .box{
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    justify-content: flex-start;
+    gap: 32px;
+}
+
+.beeSlot, .greenhouseSlot, .boxSlot{
+    border: 4px solid rgb(255, 255, 255);
+    background-color: #0000008c;
+    border-radius: 10px;
+    height: 45px;
+    width: 45px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.hiveSlot, .eggSlot, .honeycombSlot{
+    height: 59px;
+    width: 59px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.hexagon {
+    aspect-ratio: 1/cos(30deg);
+    background-color: #ffe600;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.beeSlot.empty, .greenhouseSlot.empty, .boxSlot.empty{
+    background-color: rgba(139, 139, 139, 0.35);
+}
+
+.hiveSlot.empty, .eggSlot.empty, .honeycombSlot.empty{
+    background-color: #ffb700;
+}
+
+.hiveSlot.cooking{
+    background-color: #ff6a25;
+}
+
+/* 
+========================================
+||                MENU                ||
+========================================
+*/
+
+.tab-content{
+    height: 100%;
+}
+
+.menu{
+    position: fixed;
+    height: 350px;
+    display: flex;
+    flex-direction: row-reverse;
+    top: 20%;
+}
+
+.menu .tabs>div{
+    border: 4px solid rgb(0, 0, 0);
+    width: 40px;
+    padding: 10px;
+    border-left: none;
+    background-color: rgba(0, 0, 0, 0.479);
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu .tabs{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.menu img{
+    width: 34px;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+.menu .content{
+    padding: 10px;
+    border-right: 4px solid rgb(0, 0, 0);
+    border-top: 4px solid rgb(0, 0, 0);
+    border-bottom: 4px solid rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.479);
+    color: rgb(255, 255, 255);
+    width: 400px;
+    border-radius: 0 10px 10px 0;
+}
+
+.menu .tab-button:hover, .menu .tab-button.selected, #quests-button:hover, #inventory-button:hover{
+    border: 4px solid rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.312);
+    color: black;
+}
+
+#inventory-button{
+    border-radius: 0 10px 0 0;
+    border-top: 4px solid rgb(0, 0, 0);
+    border-bottom:  4px solid transparent;
+}
+
+#quests-button{
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid rgb(0, 0, 0);
+    border-radius: 0 0 10px 0;
+}
+
+/* 
+========================================
+||        MENU - HEALTH/STATS         ||
+========================================
+*/
+
+.health-container{
+    align-items: center;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    height: 100%;
+}
+
+.health-container .bottom-section{
+    flex-direction: row;
+    display: flex;
+}
+
+.health-content, .bee-close-up{
+    border: 4px solid rgb(0, 0, 0);
+    background-color: rgba(139, 139, 139, 0.35);
+    border-radius: 10px;
+    align-items: end;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    height: 100%;
+    margin: 10px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.health-container .beeImg{
+    width: 120px;
+    height: auto;
+}
+
+.health-content input{
+    margin: 5px;
+    text-align: end;
+    width: 50px;
+    background-color: rgba(0, 0, 0, 0.479);
+    color: white;
+    font-size: 20px;
+}
+
+.heart-container{
+    border: 4px solid rgb(255, 104, 104);
+    background-color: rgb(255 104 104 / 35%);
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 367px;
+    height: 92px;
+}
+
+.heart-container .heart-img{
+    width: auto;
+    height: 120px;
+}
+
+/* 
+========================================
+||           MENU - QUESTS            ||
+========================================
+*/
+
+.quests{
+    display: flex;
+    font-family: 'Devin Chavez Font', sans-serif;
+}
+
+.quests img{
+    width: 150px;
+    image-rendering: pixelated;
+    margin: 0 40px 0 0;
+    background-color: #616161;
 }
