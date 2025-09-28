@@ -4,14 +4,13 @@ class Inventory{
         this.shape = shape;
         this.items = [];
     
-
         // click each item in bee inventory to other inventories
-        const slots = document.querySelectorAll('.beeSlot');
+        const slots = document.querySelectorAll('.slot');
         slots.forEach(slot => {
             slot.addEventListener('click', ()=> {
                 selectables.forEach(location => {
-                    if(location.selected){
-                        this.moveItem(slot, location);
+                    if(location.selected || location.name === 'bee'){
+                        location.inventory.moveItem(slot, location);
 
                         // everytime an item is placed in the hive, check the quest status
                         // if(location === hiveSprite){
@@ -21,6 +20,7 @@ class Inventory{
                 });
             })
         });
+        
     }
 
     // item from bee inventory to location inv
@@ -39,9 +39,25 @@ class Inventory{
         }
     }
 
+    // place item back into bee
+    takeItem(slot, location){
+        for (const [index, item] of location.inventory.items.entries()) {
+            if(slot.firstChild && item.src === slot.firstChild.src){
+                if(player.hasSpace()){
+                    // ui
+                    this.addToInventory(item.name); // pass in bee 
+                    slot.firstChild.remove()
+                    slot.classList.add('empty');
+                }
+                break;
+            }
+        }
+    }
+
     //individual items into open invenory
     addItemToLocationInventory(item, location){
-        let slots, inventory;
+        console.log('addItemToLocationInventory', location)
+        let slots;
         switch(location){
             case hive: { 
                 slots = document.querySelectorAll('.hiveSlot');
@@ -64,7 +80,6 @@ class Inventory{
             // }
             default: { // put in bee
                 slots = document.querySelectorAll('.beeSlot'); 
-                inventory = player.inventory.items;
             }
         }
         
@@ -103,6 +118,7 @@ class Inventory{
         for(let i = 0; i < size; i++){
             const slot = document.createElement('div');
             slot.className = `${location}Slot`;
+            slot.classList.add('slot');
             slot.classList.add('empty');
             if(shape==='hexagon'){slot.classList.add('hexagon')}
             document.querySelector(`.${location}-inventory`).appendChild(slot);

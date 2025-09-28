@@ -1,4 +1,4 @@
-// canvas
+// canvas setup
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
@@ -31,6 +31,9 @@ function animate(){
     movePlayer();
 }
 
+
+//------------------- create everything ------------------------
+
 const world = new World('img/map(400x-expanded).png', [460, 10, 5888, 4606]);
 const foreground = new World('img/foreground_map.png');
 const player = new Player('bee', 20, 100, 5, 1, 1);
@@ -44,14 +47,28 @@ const houseCollision = [3581, 3652, 570, 64];
 const gardenOne = [2612, 815, 705, 315]
 
 //put flowers in the garden
-spawnItems('pumpkin', 57, gardenOne);
+spawnItems('pumpkin', 45, gardenOne);
 
 // add everything to the correct lists before drawing them 
 const movables = [world, foreground, ...items, hive];
 const moveableBoundaries = [world.boundaries, houseCollision, gardenOne];
-const selectables = [hive];
-animate();
+const selectables = [hive, player];
 
+// move player to starting spot (without effecting all other sprites)
+movables.forEach(movable => { movable.position.x -= 1000; movable.position.y -= 500 });
+moveableBoundaries.forEach(coordinate => { coordinate[0] -= 1000; coordinate[1] -= 500 });
+cameraOffset.x += 1000;
+cameraOffset.y += 500;
+
+// move back into bee from hive
+const hiveSlots = document.querySelectorAll('.hiveSlot');
+hiveSlots.forEach(slot => {
+    slot.addEventListener('click', ()=> {
+        player.inventory.takeItem(slot, hive);
+    });
+});
+
+animate();
 
 //----------- canvas interactions --------------------------------
 
@@ -81,11 +98,10 @@ canvas.addEventListener('click', (event) => {
     const screenY = event.clientY - rect.top;
     //testing
     // console.log("MONITOR: ", mouseLocation.x, mouseLocation.y)
-    console.log("WORLD: ", cameraOffset.x + mouseLocation.x, cameraOffset.y + mouseLocation.y) // sprite coords
+    // console.log("WORLD: ", cameraOffset.x + mouseLocation.x, cameraOffset.y + mouseLocation.y) // sprite coords
 
     // clicking items
-    console.log(items[0].position)
-    console.log(mouseLocation.x, mouseLocation.y)
+    // console.log(mouseLocation.x, mouseLocation.y)
     items.forEach(item => {
         if (
             mouseLocation.x >= item.position.x &&
@@ -102,6 +118,7 @@ canvas.addEventListener('click', (event) => {
         }
     });
 
+    // clicking openable sprites
     selectables.forEach(selectable => {
         if (
             mouseLocation.x >= selectable.position.x &&
@@ -109,7 +126,6 @@ canvas.addEventListener('click', (event) => {
             mouseLocation.y >= selectable.position.y &&
             mouseLocation.y <= selectable.position.y + selectable.size
         ) {
-            // selectable.selected = selectable.selected ? false : true;
             selectable.select();
         }
     });

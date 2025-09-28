@@ -1,5 +1,7 @@
 
-// movement
+//   ========================================
+//   ||            GAME CONTROLS           ||
+//   ========================================
 
 keys = {
     w: { pressed: false},
@@ -189,8 +191,7 @@ const tooltip = document.querySelector('.tooltip');
 const hiveInvenotryContainer = document.querySelector('.hive-inventory-container');
 function hideAll(){
     tooltip.classList.add('hidden');
-    hiveInvenotryContainer.classList.add('hidden');
-    hive.selected = false;
+    if(hive.selected) hive.select();
 }
 
 // ------------------ items -----------------------------

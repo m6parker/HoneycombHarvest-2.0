@@ -19,12 +19,13 @@ class Building{
         if(this.selected){
             hiveInvenotryContainer.classList.add('hidden');
             this.selected = false;
+            this.sprite.image.src = `img/buildings/${this.name}.png`;
         }
         else{
             hiveInvenotryContainer.classList.remove('hidden');
             this.selected = true;
+            this.sprite.image.src = `img/buildings/${this.name}_selected.png`;
         }
-        //todo: change image to selectedImage
     }
 
     hasSpace(){
