@@ -9,6 +9,8 @@ class World{
         };
         
         this.sprite = new Sprite(mapImage);
+
+        movables.push(this)
     }
 }
 

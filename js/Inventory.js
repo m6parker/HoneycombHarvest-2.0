@@ -56,33 +56,7 @@ class Inventory{
 
     //individual items into open invenory
     addItemToLocationInventory(item, location){
-        console.log('addItemToLocationInventory', location)
-        let slots;
-        switch(location){
-            case hive: { 
-                slots = document.querySelectorAll('.hiveSlot');
-                break;
-            }
-            // case greenhouseSprite: {
-            //     slots = document.querySelectorAll('.greenhouseSlot'); 
-            //     inventory = greenhouseInvenotry;
-            //     break; 
-            // }
-            // case boxSprite: {
-            //     slots = document.querySelectorAll('.boxSlot');
-            //     inventory = boxInventory
-            //     break;
-            // }
-            // case 'honeycombInv': {
-            //     slots = document.querySelectorAll('.honeycombSlot');
-            //     inventory = honeycombInventory
-            //     break;
-            // }
-            default: { // put in bee
-                slots = document.querySelectorAll('.beeSlot'); 
-            }
-        }
-        
+        const slots = document.querySelectorAll(`.${location.name}Slot`);
         let itemImage = document.createElement('img');
         item.className = `inv-${item.name}`;
         itemImage.src = item.src

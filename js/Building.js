@@ -12,9 +12,11 @@ class Building{
 
         this.inventory = new Inventory(24);
         this.inventory.createInventorySlots(this.inventory.size, name, this.shape);
+        movables.push(this)
+        selectables.push(this)
     }
 
-    //select sprite
+    //select sprite changes appearance
     select(){
         if(this.selected){
             hiveInvenotryContainer.classList.add('hidden');

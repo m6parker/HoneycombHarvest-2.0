@@ -34,6 +34,8 @@ function animate(){
 
 //------------------- create everything ------------------------
 
+let movables = [];
+let selectables = [];
 const world = new World('img/map(400x-expanded).png', [460, 10, 5888, 4606]);
 const foreground = new World('img/foreground_map.png');
 const player = new Player('bee', 20, 100, 5, 1, 1);
@@ -43,16 +45,20 @@ hive.position = {x:1224, y:827}
 // coordinates where player cannot enter
 const houseCollision = [3581, 3652, 570, 64];
 
-// designated areas
+// designated areas [ x, y, length, height ]
 const gardenOne = [2612, 815, 705, 315]
-
-//put flowers in the garden
-spawnItems('pumpkin', 45, gardenOne);
+const gardenTwo = [2060, 1163, 285, 246]
+const gardenThree = [1480, 2951, 602, 564]
+const gardenFour = [3675, 1553, 758, 357]
 
 // add everything to the correct lists before drawing them 
-const movables = [world, foreground, ...items, hive];
 const moveableBoundaries = [world.boundaries, houseCollision, gardenOne];
-const selectables = [hive, player];
+
+//put flowers in the garden
+spawnItems('pumpkin', 25, gardenOne);
+spawnItems('pinkflower', 15, gardenTwo);
+spawnItems('sunflower', 35, gardenThree);
+spawnItems('carrot', 20, gardenFour);
 
 // move player to starting spot (without effecting all other sprites)
 movables.forEach(movable => { movable.position.x -= 1000; movable.position.y -= 500 });
@@ -98,7 +104,7 @@ canvas.addEventListener('click', (event) => {
     const screenY = event.clientY - rect.top;
     //testing
     // console.log("MONITOR: ", mouseLocation.x, mouseLocation.y)
-    // console.log("WORLD: ", cameraOffset.x + mouseLocation.x, cameraOffset.y + mouseLocation.y) // sprite coords
+    console.log("WORLD: ", cameraOffset.x + mouseLocation.x, cameraOffset.y + mouseLocation.y) // sprite coords
 
     // clicking items
     // console.log(mouseLocation.x, mouseLocation.y)

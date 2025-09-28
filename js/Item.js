@@ -12,6 +12,7 @@ class Item{
         this.sprite = new Sprite(itemImage);
 
         items.push(this);
+        movables.push(this)
         
     }
 
