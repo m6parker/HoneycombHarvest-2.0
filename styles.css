@@ -37,6 +37,13 @@ button:disabled{
     color: black;
 }
 
+.hexagon {
+    aspect-ratio: 1/cos(30deg);
+    background-color: #ffe600;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+
 /* 
 ========================================
 ||              WORLD UI              ||
@@ -101,6 +108,40 @@ button:disabled{
 
 .hiveSlot.cooking{
     background-color: #ff6a25;
+}
+
+.hive-inventory, .honeycomb-inventory, .egg-inventory{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 5px;
+    justify-content: space-around;
+    border: 4px solid black;
+    padding: 10px;
+    margin: 5px;
+    background-color: #8b650692;
+    border-radius: 10px;
+    width: 86%;
+}
+
+/* 
+========================================
+||          INVENTORY - HIVE          ||
+========================================
+*/
+
+.hive-inventory-container{
+    width: 500px;
+    background-color: rgb(225 196 150 / 0.45);
+    position: fixed;
+    top: 10%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    left: 50%;
+    border-radius: 10px;
+    border: 4px solid black;
+    flex-direction: column;
 }
 
 /* 

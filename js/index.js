@@ -21,6 +21,7 @@ function animate(){
     world.sprite.draw(world.position);
     player.sprite.draw(player.position);
     foreground.sprite.draw(foreground.position);
+    hive.sprite.draw(hive.position);
     items.forEach(item => item.sprite.draw(item.position));
 
 
@@ -33,6 +34,8 @@ function animate(){
 const world = new World('img/map(400x-expanded).png', [460, 10, 5888, 4606]);
 const foreground = new World('img/foreground_map.png');
 const player = new Player('bee', 20, 100, 5, 1, 1);
+let hive = new Building('hive', 100)
+hive.position = {x:1224, y:827}
 
 // coordinates where player cannot enter
 const houseCollision = [3581, 3652, 570, 64];
@@ -41,12 +44,12 @@ const houseCollision = [3581, 3652, 570, 64];
 const gardenOne = [2612, 815, 705, 315]
 
 //put flowers in the garden
-spawnItems('pumpkin', 40, gardenOne);
+spawnItems('pumpkin', 57, gardenOne);
 
 // add everything to the correct lists before drawing them 
-const movables = [world, foreground, ...items];
+const movables = [world, foreground, ...items, hive];
 const moveableBoundaries = [world.boundaries, houseCollision, gardenOne];
-// const selectables = [hiveSprite, greenhouseSprite, boxSprite, buyBoxSprite, frogSprite]; // sprites only rn
+const selectables = [hive];
 animate();
 
 
@@ -96,6 +99,18 @@ canvas.addEventListener('click', (event) => {
             tooltip.style.top = `${mouseLocation.y + 10}px`;
 
             tooltip.innerHTML = `${item.name}: ${item.quality}`;
+        }
+    });
+
+    selectables.forEach(selectable => {
+        if (
+            mouseLocation.x >= selectable.position.x &&
+            mouseLocation.x <= selectable.position.x + selectable.size &&
+            mouseLocation.y >= selectable.position.y &&
+            mouseLocation.y <= selectable.position.y + selectable.size
+        ) {
+            // selectable.selected = selectable.selected ? false : true;
+            selectable.select();
         }
     });
 });
